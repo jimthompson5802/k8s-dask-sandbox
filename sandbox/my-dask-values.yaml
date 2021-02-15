@@ -1,4 +1,7 @@
 jupyter:
+  env:
+    - name: EXTRA_PIP_PACKAGES
+      value: dask_kubernetes --upgrade
   mounts:
     volumes:
       - name: my-sandbox
@@ -8,6 +11,7 @@ jupyter:
       - name: my-sandbox
         mountPath: /home/jovyan/sandbox
 worker:
+  replicas: 1
   mounts:
     volumes:
       - name: my-sandbox
