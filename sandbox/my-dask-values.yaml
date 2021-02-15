@@ -1,2 +1,18 @@
 jupyter:
-  serviceType: "LoadBalancer"
+  mounts:
+    volumes:
+      - name: my-sandbox
+        hostPath:
+          path: /Users/jim/Desktop/docker_sandbox/k8s-dask-sandbox/sandbox
+    volumeMounts:
+      - name: my-sandbox
+        mountPath: /home/jovyan/sandbox
+worker:
+  mounts:
+    volumes:
+      - name: my-sandbox
+        hostPath:
+          path: /Users/jim/Desktop/docker_sandbox/k8s-dask-sandbox/sandbox
+    volumeMounts:
+      - name: my-sandbox
+        mountPath: /home/jovyan/sandbox
