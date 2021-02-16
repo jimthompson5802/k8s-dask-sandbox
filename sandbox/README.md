@@ -15,3 +15,8 @@ kubectl port-forward pod/<pod-name> <host-port>:<container-port>
 # example access dashboard
 kubectl port-forward pod/my-dask-jupyter-749c8fc96b-5mqng 9797:8787
 ```
+
+## Generate k8s manifest files from Helm chart
+``` 
+helm template --output-dir templates my-dask ../dask -f my-dask-values.yaml
+```
