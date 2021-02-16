@@ -1,0 +1,61 @@
+---
+# Source: dask/templates/dask-jupyter-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-dask-jupyter
+  labels:
+    app: dask
+    heritage: "Helm"
+    release: "my-dask"
+    chart: dask-4.5.7
+    component: jupyter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dask
+      release: "my-dask"
+      component: jupyter
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: dask
+        release: "my-dask"
+        component: jupyter
+    spec:
+      imagePullSecrets:
+        null
+      containers:
+        - name: my-dask-jupyter
+          image: "daskdev/dask-notebook:2021.1.0"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8888
+          resources:
+            {}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /usr/local/etc/jupyter
+            - name: dask-labextension-config-volume
+              mountPath: /home/jovyan/.config/dask
+            - mountPath: /home/jovyan/sandbox
+              name: my-sandbox
+          env:
+            - name: DASK_SCHEDULER_ADDRESS
+              value: my-dask-scheduler:8786
+            - name: EXTRA_PIP_PACKAGES
+              value: dask_kubernetes --upgrade
+      volumes:
+        - hostPath:
+            path: /Users/jim/Desktop/docker_sandbox/k8s-dask-sandbox/sandbox
+          name: my-sandbox
+        - name: config-volume
+          configMap:
+            name: my-dask-jupyter-config
+        - name: dask-labextension-config-volume
+          configMap:
+            name: my-dask-dask-labextension-config
+      serviceAccountName: "dask-jupyter"

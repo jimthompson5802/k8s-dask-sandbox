@@ -1,0 +1,67 @@
+---
+# Source: dask/templates/dask-jupyter-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-dask-jupyter-config
+  labels:
+    app: dask
+    heritage: "Helm"
+    release: "my-dask"
+    chart: dask-4.5.7
+    component: jupyter
+data:
+  jupyter_notebook_config.py: |
+    c = get_config()
+    c.NotebookApp.password = REDACTED
+    c.ContentsManager.allow_hidden = True
+
+    
+    # Extra Jupyter config goes here
+    # E.g
+    # c.NotebookApp.port = 8888
+---
+# Source: dask/templates/dask-jupyter-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-dask-dask-labextension-config
+  labels:
+    app: dask
+    heritage: "Helm"
+    release: "my-dask"
+    chart: dask-4.5.7
+    component: jupyter
+data:
+  labextension.yaml: |
+    labextension:
+      factory:
+        module: dask_kubernetes
+        class: KubeCluster
+        args: []
+        kwargs: {}
+
+    kubernetes:
+      metadata:
+      worker-template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: dask-kube
+              image: daskdev/dask:latest
+              args:
+                - dask-worker
+                - --nthreads
+                - '2'
+                - --no-dashboard
+                - --memory-limit
+                - 2GB
+                - --death-timeout
+                - '60'
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: 2G
+                requests:
+                  cpu: "1"
+                  memory: 2G

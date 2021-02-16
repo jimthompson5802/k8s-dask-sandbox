@@ -1,0 +1,25 @@
+---
+# Source: dask/templates/dask-scheduler-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-dask-scheduler
+  labels:
+    app: dask
+    heritage: "Helm"
+    release: "my-dask"
+    chart: dask-4.5.7
+    component: scheduler
+spec:
+  ports:
+    - name: my-dask-scheduler
+      port: 8786
+      targetPort: 8786
+    - name: my-dask-webui
+      port: 80
+      targetPort: 8787
+  selector:
+    app: dask
+    release: "my-dask"
+    component: scheduler
+  type: ClusterIP

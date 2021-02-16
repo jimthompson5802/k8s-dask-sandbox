@@ -1,0 +1,22 @@
+---
+# Source: dask/templates/dask-jupyter-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-dask-jupyter
+  labels:
+    app: dask
+    heritage: "Helm"
+    release: "my-dask"
+    chart: dask-4.5.7
+    component: jupyter
+spec:
+  ports:
+    - name: my-dask-jupyter
+      port: 80
+      targetPort: 8888
+  selector:
+    app: dask
+    release: "my-dask"
+    component: jupyter
+  type: ClusterIP
