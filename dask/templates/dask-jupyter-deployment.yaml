@@ -47,8 +47,8 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: /usr/local/etc/jupyter
-            - name: dask-labextension-config-volume
-              mountPath: /home/jovyan/.config/dask
+{{/*            - name: dask-labextension-config-volume*/}}
+{{/*              mountPath: /home/jovyan/.config/dask*/}}
             {{- if .Values.worker.mounts.volumeMounts }}
               {{- toYaml .Values.worker.mounts.volumeMounts | nindent 12 }}
             {{- end }}

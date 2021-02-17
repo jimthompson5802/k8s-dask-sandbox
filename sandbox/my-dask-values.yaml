@@ -11,7 +11,7 @@ jupyter:
       - name: my-sandbox
         mountPath: /home/jovyan/sandbox
 worker:
-  replicas: 1
+  replicas: 3
   mounts:
     volumes:
       - name: my-sandbox
